@@ -6,4 +6,4 @@ For setup instructions, please see the [Fabric Documentation page](https://docs.
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This project is licensed under the GNU Lesser General Public License v3.0 or later (LGPL-3.0-or-later). See [COPYING](COPYING) and [COPYING.LESSER](COPYING.LESSER) for the full text.

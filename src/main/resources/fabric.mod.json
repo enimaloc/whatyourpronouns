@@ -3,13 +3,13 @@
 	"id": "whatyourpronouns",
 	"version": "${version}",
 	"name": "WhatYourPronouns",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Displays players' pronouns, fetched from PronounDB using their Minecraft UUID, next to their name in chat, above their head, in the player tab list, and in the social interactions screen, with asynchronous caching so gameplay is never blocked.",
 	"authors": [
-		"Me!"
+		"enimaloc"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/enimaloc/whatyourpronouns",
+		"sources": "https://github.com/enimaloc/whatyourpronouns"
 	},
 	"license": "LGPL-3.0-or-later",
 	"icon": "assets/whatyourpronouns/icon.png",

@@ -9,8 +9,11 @@ import java.util.Set;
 
 /**
  * Gates every mixin in {@code whatyourpronouns-epl.mixins.json} on Enhanced Player List actually
- * being installed. Checked via classpath presence rather than a mod-loaded registry lookup,
- * because Mixin config plugins run very early — before NeoForge's mod list is guaranteed ready.
+ * being installed. Checked via a classloader resource lookup for the marker class's {@code .class}
+ * file rather than a mod-loaded registry lookup, because Mixin config plugins run very early —
+ * before NeoForge's mod list is guaranteed ready. A resource lookup (as opposed to
+ * {@code Class.forName}) never defines/loads the class itself, so it can't race Mixin's own
+ * transformer for classes — like {@link #EPL_MARKER_CLASS} — that this config's mixins target.
  */
 public class EnhancedPlayerListMixinPlugin implements IMixinConfigPlugin {
     private static final String EPL_MARKER_CLASS = "com.enhancedplayerlist.client.event.ClientEventHandler";
@@ -19,12 +22,8 @@ public class EnhancedPlayerListMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        try {
-            Class.forName(EPL_MARKER_CLASS, false, getClass().getClassLoader());
-            enhancedPlayerListPresent = true;
-        } catch (ClassNotFoundException e) {
-            enhancedPlayerListPresent = false;
-        }
+        String resourcePath = EPL_MARKER_CLASS.replace('.', '/') + ".class";
+        enhancedPlayerListPresent = getClass().getClassLoader().getResource(resourcePath) != null;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package fr.enimaloc.wyp.client.mixin;
+package fr.enimaloc.wyp.mixin;
 
 import com.mojang.authlib.GameProfile;
 import fr.enimaloc.wyp.api.WYPCache;

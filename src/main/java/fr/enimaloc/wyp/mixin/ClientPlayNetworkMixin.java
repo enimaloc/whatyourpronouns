@@ -1,4 +1,4 @@
-package fr.enimaloc.wyp.client.mixin;
+package fr.enimaloc.wyp.mixin;
 
 import fr.enimaloc.wyp.api.WYPCache;
 import net.minecraft.client.Minecraft;

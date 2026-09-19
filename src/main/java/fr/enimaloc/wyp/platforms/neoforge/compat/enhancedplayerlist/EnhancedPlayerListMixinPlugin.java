@@ -18,7 +18,7 @@ import java.util.Set;
 public class EnhancedPlayerListMixinPlugin implements IMixinConfigPlugin {
     private static final String EPL_MARKER_CLASS = "com.enhancedplayerlist.client.event.ClientEventHandler";
 
-    private boolean enhancedPlayerListPresent;
+    private volatile boolean enhancedPlayerListPresent;
 
     @Override
     public void onLoad(String mixinPackage) {

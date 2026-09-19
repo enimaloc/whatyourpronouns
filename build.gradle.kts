@@ -111,7 +111,10 @@ dependencies {
         // Enhanced Player List compat (src/.../platforms/neoforge/compat/enhancedplayerlist):
         // optional at runtime, gated by EnhancedPlayerListMixinPlugin. Compile-only so it's
         // never bundled or required.
-        "compileOnly"("maven.modrinth:enhanced-player-list:1.0.2")
+        // EPL only ships for Minecraft 1.21.1 — this assumes "not fabric" implies "1.21.1",
+        // true today since 1.21.1-neoforge is the only neoforge node (see settings.gradle.kts).
+        // Revisit if a differently-versioned neoforge node is ever added.
+        "compileOnly"("maven.modrinth:enhanced-player-list:${project.property("epl_version")}")
     }
 }
 

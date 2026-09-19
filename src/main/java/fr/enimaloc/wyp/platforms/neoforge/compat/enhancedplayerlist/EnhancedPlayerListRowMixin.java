@@ -34,6 +34,9 @@ public class EnhancedPlayerListRowMixin {
             ),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
+    // The trailing params after `ci` are Mixin's positional local-variable capture at the
+    // injection point; `playerIterator` (EPL's desugared for-each Iterator) has no use in this
+    // body but MUST stay in this exact position/order or the injection breaks.
     private static void wyp$renderPronoun(
             GuiGraphics graphics, List<PlayerStatsData> players, int startX, int startY,
             Map<String, Integer> columnWidths, List<String> statColumns, CallbackInfo ci,

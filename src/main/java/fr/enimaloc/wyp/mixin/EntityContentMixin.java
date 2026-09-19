@@ -1,4 +1,4 @@
-package fr.enimaloc.wyp.client.mixin;
+package fr.enimaloc.wyp.mixin;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;

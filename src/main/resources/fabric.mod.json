@@ -16,23 +16,18 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"fr.enimaloc.wyp.WhatYourPronouns"
+			"fr.enimaloc.wyp.platforms.fabric.WhatYourPronounsFabric"
 		],
 		"client": [
-			"fr.enimaloc.wyp.client.WhatYourPronounsClient"
+			"fr.enimaloc.wyp.platforms.fabric.WhatYourPronounsFabricClient"
 		]
 	},
 	"mixins": [
-		"whatyourpronouns.mixins.json",
-		{
-			"config": "whatyourpronouns.client.mixins.json",
-			"environment": "client"
-		}
+		"whatyourpronouns.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.19.3",
-		"minecraft": "~1.20.1",
-		"java": ">=17",
-		"fabric-api": "*"
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "${minecraft_version_range}",
+		"java": ">=17"
 	}
 }

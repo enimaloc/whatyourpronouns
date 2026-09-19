@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "${neo_loader_version_range}"
+license = "LGPL-3.0-or-later"
+
+[[mods]]
+modId = "whatyourpronouns"
+version = "${version}"
+displayName = "WhatYourPronouns"
+description = '''Displays players' pronouns, fetched from PronounDB using their Minecraft UUID, next to their name in chat, above their head, in the player tab list, and in the social interactions screen, with asynchronous caching so gameplay is never blocked.'''
+authors = "enimaloc"
+logoFile = "assets/whatyourpronouns/icon.png"
+
+[[dependencies.whatyourpronouns]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[${neoforge_version},)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.whatyourpronouns]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[${mc_range_lower},${mc_range_upper})"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[mixins]]
+    config = "whatyourpronouns.mixins.json"

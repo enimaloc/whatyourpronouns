@@ -158,7 +158,7 @@ publishing {
 // fail if invoked).
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
-    projectId.set("CHANGE_ME") // Modrinth project slug or ID
+    projectId.set("whatyourpronouns") // https://modrinth.com/mod/whatyourpronouns
     // versionNumber must stay unique per node (mc+loader) to avoid collisions between two nodes
     // sharing the same minecraft_version (1.21.1-fabric and 1.21.1-neoforge).
     versionNumber.set("${rootProject.property("mod_version")}+${project.property("minecraft_version")}-$loader")

@@ -48,9 +48,8 @@ jobs:
 
     - name: Publish to Modrinth
       # Same principle as "build": without a project argument, publishes every node in one call.
-      # continue-on-error: this step is a no-op failure until a real Modrinth projectId replaces
-      # the CHANGE_ME placeholder in build.gradle.kts' modrinth{} block (see README) — the jars are
-      # already attached to the GitHub Release by the previous step regardless of this outcome.
+      # continue-on-error: a Modrinth-side hiccup (rate limit, duplicate version, etc.) shouldn't
+      # block the Release — the jars are already attached to it by the previous step regardless.
       continue-on-error: true
       run: ./gradlew modrinth
       env:

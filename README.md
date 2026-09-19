@@ -9,7 +9,7 @@ This project uses [Architectury](https://docs.architectury.dev/) and [Stonecutte
 ./gradlew build
 
 # Run the client for the active node (1.20.1-fabric by default, see stonecutter.gradle.kts)
-./gradlew runClient
+./gradlew ":1.20.1-fabric:runClient"
 
 # Run a specific node without making it active
 ./gradlew ":1.21.1-fabric:runClient"

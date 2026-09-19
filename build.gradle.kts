@@ -100,10 +100,8 @@ dependencies {
     if (loader == "fabric") {
         "modImplementation"("net.fabricmc:fabric-loader:${project.property("loader_version")}")
         "modImplementation"("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
-        "modImplementation"("dev.architectury:architectury-fabric:${project.property("architectury_version")}")
     } else {
         "neoForge"("net.neoforged:neoforge:${project.property("neoforge_version")}")
-        "modImplementation"("dev.architectury:architectury-neoforge:${project.property("architectury_version")}")
     }
 }
 
@@ -170,10 +168,4 @@ modrinth {
     uploadFile.set(tasks.named("remapJar"))
     gameVersions.set(listOf(project.property("minecraft_version") as String))
     loaders.set(listOf(loader))
-    dependencies {
-        required.project("architectury-api")
-        if (loader == "fabric") {
-            required.project("fabric-api")
-        }
-    }
 }

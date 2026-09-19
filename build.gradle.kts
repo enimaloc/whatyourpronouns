@@ -91,7 +91,9 @@ repositories {
     maven("https://maven.fabricmc.net/")
     maven("https://maven.architectury.dev/")
     maven("https://maven.neoforged.net/releases/")
-    maven("https://api.modrinth.com/maven")
+    maven("https://api.modrinth.com/maven") {
+        content { includeGroup("maven.modrinth") }
+    }
 }
 
 dependencies {

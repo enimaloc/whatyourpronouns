@@ -42,8 +42,6 @@ public class EnhancedPlayerListRowMixin {
             Map<String, Integer> columnWidths, List<String> statColumns, CallbackInfo ci,
             int rowY, Iterator<PlayerStatsData> playerIterator, PlayerStatsData playerData, int nameColor
     ) {
-        if (!playerData.isOnline()) return;
-
         UUID uuid = UUID.fromString(playerData.getUuid());
         String text = WYPCache.get(uuid).getNow(WYPCache.LOADING).formatPronoun(Locale.ENGLISH);
         if (text.isBlank()) return;

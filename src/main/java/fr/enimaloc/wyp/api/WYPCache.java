@@ -44,15 +44,23 @@ public class WYPCache {
 
     public static final Entry INVALID = new Entry(0, Map.of());
     public static final Entry LOADING = new Entry(Long.MAX_VALUE, Map.of(Locale.ENGLISH, new String[]{"Loading..."}));
+    // PronounDB API v2's bulk lookup endpoint accepts at most 50 ids per request; a request over
+    // that cap is rejected outright, which would otherwise stall every pending lookup at once
+    // (e.g. Enhanced Player List's offline-players panel queuing hundreds of uuids).
+    private static final int MAX_BATCH_SIZE = 50;
     private static final Map<UUID, Entry> CACHE = new HashMap<>();
     private static final Map<UUID, CompletableFuture<Entry>> TO_FETCH = new HashMap<>();
     private static final Thread thread = new Thread(() -> {
         while (true) {
             if (!TO_FETCH.isEmpty()) {
-                List<PronounLookup> lookups = PronounAPI.fetch(TO_FETCH.keySet().toArray(UUID[]::new));
-                for (PronounLookup lookup : lookups) {
-                    CACHE.put(lookup.uuid(), new Entry(System.currentTimeMillis() + (1000 * 60 * 60 * 6), lookup.pronouns()));
-                    TO_FETCH.remove(lookup.uuid()).complete(CACHE.get(lookup.uuid()));
+                List<UUID> pending = new ArrayList<>(TO_FETCH.keySet());
+                for (int i = 0; i < pending.size(); i += MAX_BATCH_SIZE) {
+                    List<UUID> batch = pending.subList(i, Math.min(i + MAX_BATCH_SIZE, pending.size()));
+                    List<PronounLookup> lookups = PronounAPI.fetch(batch.toArray(UUID[]::new));
+                    for (PronounLookup lookup : lookups) {
+                        CACHE.put(lookup.uuid(), new Entry(System.currentTimeMillis() + (1000 * 60 * 60 * 6), lookup.pronouns()));
+                        TO_FETCH.remove(lookup.uuid()).complete(CACHE.get(lookup.uuid()));
+                    }
                 }
             }
             for (Map.Entry<UUID, Entry> entry : CACHE.entrySet()) {

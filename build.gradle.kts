@@ -172,6 +172,10 @@ publishing {
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
     projectId.set("whatyourpronouns") // https://modrinth.com/mod/whatyourpronouns
+    // Keeps the Modrinth project description in sync with the user-facing README on every
+    // publish. Deliberately README.modrinth.md, not the generated README.md: the latter also
+    // has the development-only sections from README.github.md, which don't belong on Modrinth.
+    syncBodyFrom.set(rootProject.file("README.modrinth.md").readText())
     // versionNumber must stay unique per node (mc+loader) to avoid collisions between two nodes
     // sharing the same minecraft_version (1.21.1-fabric and 1.21.1-neoforge).
     versionNumber.set("${rootProject.property("mod_version")}+${project.property("minecraft_version")}-$loader")

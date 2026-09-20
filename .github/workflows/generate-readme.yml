@@ -1,0 +1,46 @@
+# Regenerates README.md (via the "generateReadme" Gradle task, see stonecutter.gradle.kts)
+# whenever either of its sources changes, and commits the result back to the branch.
+
+name: Generate README
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'README.modrinth.md'
+      - 'README.github.md'
+  workflow_dispatch:
+
+jobs:
+  generate-readme:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'microsoft'
+
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: generate readme
+        run: ./gradlew generateReadme
+
+      - name: commit README.md if changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README.md already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: regenerate README.md"
+          git push

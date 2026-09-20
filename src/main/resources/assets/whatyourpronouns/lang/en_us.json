@@ -1,6 +1,8 @@
 {
   "whatyourpronouns.loading": "Loading...",
   "whatyourpronouns.command.refresh": "Refreshed %s cached pronoun(s)",
+  "whatyourpronouns.command.hint_hidden": "Got it, you won't see this reminder on join again. Run /wyp hint anytime to see it again.",
+  "whatyourpronouns.hint.no_pronoun": "You don't have any pronouns set on %s yet. Run /wyp hint hide to stop seeing this on join.",
   "whatyourpronouns.pronoun.he": "he",
   "whatyourpronouns.pronoun.she": "she",
   "whatyourpronouns.pronoun.they": "they",

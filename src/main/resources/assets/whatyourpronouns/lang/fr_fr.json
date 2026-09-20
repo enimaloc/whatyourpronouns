@@ -1,6 +1,8 @@
 {
   "whatyourpronouns.loading": "Chargement...",
   "whatyourpronouns.command.refresh": "%s pronom(s) en cache rafraîchi(s)",
+  "whatyourpronouns.command.hint_hidden": "Compris, ce rappel ne s'affichera plus à la connexion. Utilisez /wyp hint pour le revoir à tout moment.",
+  "whatyourpronouns.hint.no_pronoun": "Vous n'avez pas encore de pronoms définis sur %s. Utilisez /wyp hint hide pour ne plus voir ce message à la connexion.",
   "whatyourpronouns.pronoun.he": "il",
   "whatyourpronouns.pronoun.she": "elle",
   "whatyourpronouns.pronoun.they": "iel",

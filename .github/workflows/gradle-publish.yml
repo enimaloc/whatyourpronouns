@@ -32,17 +32,17 @@ jobs:
         RELEASE_TAG: ${{ github.event.release.tag_name }}
         TARGET_BRANCH: ${{ github.event.release.target_commitish }}
       run: |
-        tag_version="${RELEASE_TAG#v}"
+        # Tags are the bare version (e.g. "1.1.0"), never "v"-prefixed.
         current_version=$(sed -n 's/^mod_version=//p' gradle.properties)
-        if [ "$tag_version" = "$current_version" ]; then
+        if [ "$RELEASE_TAG" = "$current_version" ]; then
           echo "mod_version ($current_version) already matches release tag $RELEASE_TAG"
           exit 0
         fi
-        echo "mod_version ($current_version) doesn't match release tag $RELEASE_TAG, updating to $tag_version"
-        sed -i "s/^mod_version=.*/mod_version=$tag_version/" gradle.properties
+        echo "mod_version ($current_version) doesn't match release tag $RELEASE_TAG, updating to $RELEASE_TAG"
+        sed -i "s/^mod_version=.*/mod_version=$RELEASE_TAG/" gradle.properties
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git commit -am "chore: bump mod_version to $tag_version to match release tag $RELEASE_TAG"
+        git commit -am "chore: bump mod_version to $RELEASE_TAG to match release tag"
         git push origin "HEAD:refs/heads/$TARGET_BRANCH" || \
           echo "::warning::couldn't push the mod_version fix to $TARGET_BRANCH (it may have moved since the tag was cut); update gradle.properties manually. The current build still uses the corrected version."
 

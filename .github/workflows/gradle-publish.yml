@@ -18,6 +18,34 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        # Full history, not just the tag commit: needed to push the version-bump commit below
+        # as a fast-forward of the release's target branch.
+        fetch-depth: 0
+
+    - name: Ensure mod_version matches the release tag
+      # mod_version (gradle.properties) drives the artifact/Modrinth version; the release tag is
+      # what users and Modrinth associate the build with. If a release is cut from a tag that
+      # doesn't match, fix gradle.properties here so the build below uses the right version, and
+      # push that fix to the release's target branch to keep the repo in sync going forward.
+      env:
+        RELEASE_TAG: ${{ github.event.release.tag_name }}
+        TARGET_BRANCH: ${{ github.event.release.target_commitish }}
+      run: |
+        tag_version="${RELEASE_TAG#v}"
+        current_version=$(sed -n 's/^mod_version=//p' gradle.properties)
+        if [ "$tag_version" = "$current_version" ]; then
+          echo "mod_version ($current_version) already matches release tag $RELEASE_TAG"
+          exit 0
+        fi
+        echo "mod_version ($current_version) doesn't match release tag $RELEASE_TAG, updating to $tag_version"
+        sed -i "s/^mod_version=.*/mod_version=$tag_version/" gradle.properties
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git commit -am "chore: bump mod_version to $tag_version to match release tag $RELEASE_TAG"
+        git push origin "HEAD:refs/heads/$TARGET_BRANCH" || \
+          echo "::warning::couldn't push the mod_version fix to $TARGET_BRANCH (it may have moved since the tag was cut); update gradle.properties manually. The current build still uses the corrected version."
+
     # The Gradle daemon must run on the newest Java version required by any node (21, in this project).
     - name: Set up JDK 21
       uses: actions/setup-java@v4

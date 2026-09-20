@@ -8,11 +8,31 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class WYPCache {
+    // PronounDB's "sets" values (see PronounAPI) are fixed English identifiers - "she", "he",
+    // "they", "it", "any", "other", "ask", "avoid" - not player-facing text by themselves, so
+    // they're routed through the mod's own translation keys instead of shown as-is.
+    private static final String PRONOUN_KEY_PREFIX = "whatyourpronouns.pronoun.";
+    private static final String LOADING_KEY = "whatyourpronouns.loading";
+
+    // Language.getOrDefault() (which Component.getString() resolves through) returns the key
+    // itself when no translation exists; fall back to `fallback` in that case instead of
+    // showing the raw key. formatPronoun()/asComponent() rely on this never returning null.
+    private static String translate(String key, String fallback) {
+        String translated = Component.translatable(key).getString();
+        return translated.equals(key) ? fallback : translated;
+    }
+
     public record Entry(long invalidAt, Map<Locale, String[]> pronouns) {
         public String formatPronoun(Locale locale) {
+            if (this == LOADING) {
+                return translate(LOADING_KEY, "Loading...");
+            }
             String[] pronoun = pronouns.getOrDefault(locale, new String[0]);
             String[] finalPronoun = new String[Math.min(pronoun.length, 2)];
             System.arraycopy(pronoun, 0, finalPronoun, 0, finalPronoun.length);
+            for (int i = 0; i < finalPronoun.length; i++) {
+                finalPronoun[i] = translate(PRONOUN_KEY_PREFIX + finalPronoun[i], finalPronoun[i]);
+            }
             return switch (finalPronoun.length) {
                 case 2 -> finalPronoun[0] + "/" + finalPronoun[1];
                 case 1 -> finalPronoun[0];
@@ -21,10 +41,11 @@ public class WYPCache {
         }
 
         public ChatFormatting color() {
-            String text = formatPronoun(Locale.ENGLISH);
-            if (text.isBlank()) return ChatFormatting.DARK_GRAY;
-            text = text.split("/")[0];
-            return switch (text) {
+            // Deliberately the raw (untranslated) code, not formatPronoun(): translated text
+            // depends on the viewer's Minecraft language and would never match these literals.
+            String[] codes = pronouns.getOrDefault(Locale.ENGLISH, new String[0]);
+            if (codes.length == 0) return ChatFormatting.DARK_GRAY;
+            return switch (codes[0]) {
                 case "she" -> ChatFormatting.LIGHT_PURPLE;
                 case "he" -> ChatFormatting.GREEN;
                 case "they" -> ChatFormatting.AQUA;
@@ -43,7 +64,7 @@ public class WYPCache {
     }
 
     public static final Entry INVALID = new Entry(0, Map.of());
-    public static final Entry LOADING = new Entry(Long.MAX_VALUE, Map.of(Locale.ENGLISH, new String[]{"Loading..."}));
+    public static final Entry LOADING = new Entry(Long.MAX_VALUE, Map.of());
     // PronounDB API v2's bulk lookup endpoint accepts at most 50 ids per request; a request over
     // that cap is rejected outright, which would otherwise stall every pending lookup at once
     // (e.g. Enhanced Player List's offline-players panel queuing hundreds of uuids).

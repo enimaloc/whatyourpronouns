@@ -1,0 +1,13 @@
+{
+	"required": false,
+	"package": "fr.enimaloc.wyp.platforms.neoforge.compat.enhancedplayerlist",
+	"plugin": "fr.enimaloc.wyp.platforms.neoforge.compat.enhancedplayerlist.EnhancedPlayerListMixinPlugin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [],
+	"client": [
+		"EnhancedPlayerListRowMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

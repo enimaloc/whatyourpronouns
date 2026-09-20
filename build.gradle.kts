@@ -76,9 +76,12 @@ val basePackagePath = (rootProject.property("mod_package") as String).replace(".
 sourceSets["main"].java.exclude("$basePackagePath/platforms/$excludedPlatform/**")
 stonecutter.filters.exclude("java/$basePackagePath/platforms/$excludedPlatform/**")
 
-// Only one of fabric.mod.json / neoforge.mods.toml should end up in this node's jar.
+// Only one of fabric.mod.json / neoforge.mods.toml should end up in this node's jar. The EPL
+// compat mixin config references classes that only exist on the neoforge node's compileOnly
+// classpath, so it's excluded from Fabric too.
 sourceSets["main"].resources.exclude(
-    if (loader == "fabric") "META-INF/neoforge.mods.toml" else "fabric.mod.json"
+    if (loader == "fabric") listOf("META-INF/neoforge.mods.toml", "whatyourpronouns-epl.mixins.json")
+    else listOf("fabric.mod.json")
 )
 
 // Without this call, Stonecutter creates no task to process //? if markers for this sourceSet.
@@ -88,6 +91,9 @@ repositories {
     maven("https://maven.fabricmc.net/")
     maven("https://maven.architectury.dev/")
     maven("https://maven.neoforged.net/releases/")
+    maven("https://api.modrinth.com/maven") {
+        content { includeGroup("maven.modrinth") }
+    }
 }
 
 dependencies {
@@ -102,6 +108,13 @@ dependencies {
         "modImplementation"("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
     } else {
         "neoForge"("net.neoforged:neoforge:${project.property("neoforge_version")}")
+        // Enhanced Player List compat (src/.../platforms/neoforge/compat/enhancedplayerlist):
+        // optional at runtime, gated by EnhancedPlayerListMixinPlugin. Compile-only so it's
+        // never bundled or required.
+        // EPL only ships for Minecraft 1.21.1 — this assumes "not fabric" implies "1.21.1",
+        // true today since 1.21.1-neoforge is the only neoforge node (see settings.gradle.kts).
+        // Revisit if a differently-versioned neoforge node is ever added.
+        "compileOnly"("maven.modrinth:enhanced-player-list:${project.property("epl_version")}")
     }
 }
 

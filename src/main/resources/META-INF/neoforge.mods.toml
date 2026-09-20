@@ -26,3 +26,6 @@ logoFile = "assets/whatyourpronouns/icon.png"
 
 [[mixins]]
     config = "whatyourpronouns.mixins.json"
+
+[[mixins]]
+    config = "whatyourpronouns-epl.mixins.json"

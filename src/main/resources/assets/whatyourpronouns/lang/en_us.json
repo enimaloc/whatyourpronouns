@@ -1,5 +1,6 @@
 {
   "whatyourpronouns.loading": "Loading...",
+  "whatyourpronouns.command.refresh": "Refreshed %s cached pronoun(s)",
   "whatyourpronouns.pronoun.he": "he",
   "whatyourpronouns.pronoun.she": "she",
   "whatyourpronouns.pronoun.they": "they",

@@ -1,5 +1,6 @@
 {
   "whatyourpronouns.loading": "Chargement...",
+  "whatyourpronouns.command.refresh": "%s pronom(s) en cache rafraîchi(s)",
   "whatyourpronouns.pronoun.he": "il",
   "whatyourpronouns.pronoun.she": "elle",
   "whatyourpronouns.pronoun.they": "iel",

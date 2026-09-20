@@ -128,6 +128,18 @@ public class WYPCache {
         }
     }
 
+    /**
+     * Evicts every cached and pending entry, forcing the next {@link #get} for each uuid to
+     * re-fetch. Backs the "/wyp refresh" command; the actual re-fetch happens lazily, next time
+     * something (chat, tab list, ...) asks for that uuid again.
+     */
+    public static int refreshAll() {
+        Set<UUID> uuids = new HashSet<>(CACHE.keySet());
+        uuids.addAll(TO_FETCH.keySet());
+        evict(uuids.toArray(UUID[]::new));
+        return uuids.size();
+    }
+
     private static void fetchWaiting() {
     }
 }
